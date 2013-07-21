@@ -1,10 +1,12 @@
 package me.mdobs.books;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -28,8 +30,19 @@ public class BooksListViewActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_books_list_view);
-        
-        final ArrayList<String> titles;
+        getBooks();
+    }
+    
+    @Override
+    protected void onResume() {
+    	super.onResume();
+    	getBooks();
+    	
+    }
+
+
+	public void getBooks() {
+		final ArrayList<String> titles;
         titles = new ArrayList<String>();
         
         final ListView listView = (ListView) findViewById(R.id.listview);
@@ -57,9 +70,26 @@ public class BooksListViewActivity extends Activity {
         	}
         	
         });
+	}
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	switch(item.getItemId()) { 
+    	case R.id.action_add_book:
+    		openBookForm();
+    		return true;
+    	default:
+    		return false;
+    	}
+    	
     }
-
-
+    
+    public void openBookForm(){
+    	Intent intent = new Intent(this, NewBookActivity.class);
+    	this.startActivity(intent);
+    }
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
