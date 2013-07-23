@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -39,8 +40,7 @@ public class BooksListViewActivity extends Activity {
     	getBooks();
     	
     }
-
-
+    
 	public void getBooks() {
 		final ArrayList<String> titles;
         titles = new ArrayList<String>();
@@ -50,7 +50,8 @@ public class BooksListViewActivity extends Activity {
         final BooksArrayAdapter adapter = new BooksArrayAdapter(this, android.R.layout.simple_list_item_1, titles);
         adapter.setNotifyOnChange(true);
         listView.setAdapter(adapter);
-        this.getEntitiesAsync("books", "select *", new ApiResponseCallback(){
+        
+        this.client.getDataClient().getEntitiesAsync("books", "select *", new ApiResponseCallback(){
         	
         	@Override
         	public void onException(Exception ex) {
@@ -95,16 +96,6 @@ public class BooksListViewActivity extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.books_list_view, menu);
         return true;
-    }
-    
-    public void getEntitiesAsync(final String type, final String query, final ApiResponseCallback callback) {
-    	final ApigeeClient apiClient = this.client;
-    	(new ClientAsyncTask<ApiResponse>(callback){
-    		@Override
-    		public ApiResponse doTask(){
-    			return apiClient.getDataClient().getEntities(type, query);
-    		}
-    	}).execute();
     }
 
     private class BooksArrayAdapter extends ArrayAdapter<String> {
